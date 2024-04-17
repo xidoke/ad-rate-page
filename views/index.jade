@@ -1,0 +1,51 @@
+extends layout
+
+block content
+  - let display = { 1: ["stt", "website", "position", "dimensions", "platform", "demo", "url", "buying_method", "homepage", "csr", "ctr", "est"], 2: ["stt", "website", "position", "dimensions", "platform", "demo", "url", "buying_method", "price", "ctr", "est", "note"], 3: ["stt", "website", "position", "dimensions", "platform", "demo", "url", "buying_method", "homepage", "csr", "subject", "est"], 4: ["stt", "website", "position", "dimensions", "platform", "demo", "url", "buying_method", "homepage", "csr", "ctr", "est"], 5: ["stt", "website", "position", "dimensions", "platform", "demo", "url", "week", "month", "quarter_year", "ctr", "est"], 6: ["stt", "website", "position", "dimensions", "platform", "demo", "url", "buying_method", "homepage", "csr", "ctr", "est"], 7: ["stt", "website", "position", "dimensions", "platform", "demo", "url", "buying_method", "homepage", "detailed_csr", "csr", "est"] };
+  h1= "Bảng giá quảng cáo"
+  - let stt = 0;
+  - for(let type = 1; type <= maxType; type++)
+    - if (type===6) continue
+      table.table
+        thead
+          tr
+            each val in mapping[type]
+              th
+                pre= val 
+        tbody 
+          - let adRatesWithType = adRates.filter(adRate => adRate.type == type)
+          each adRate in adRatesWithType
+            if (adRate.stt != stt)
+              - stt= adRate.stt;
+              tr 
+                td.website(colspan=11)
+                  a.website(href="https://"+adRate.website)= adRate.website
+            tr 
+              - let demo = '';
+              - for(val of display[type])
+                
+                - if (val =='position') 
+                  td
+                    p= adRate[val]
+                - else if (val =='demo') demo = adRate[val]
+                - else if (val =='url') 
+                  td
+                    a(href= adRate[url])= demo
+                      
+                - else
+                  td
+                    pre= adRate[val]
+
+  script(src='/javascripts/jquery.min.js')
+  script(src='/javascripts/jquery.table.marge.js')
+  script.
+    $(document).ready(function() {
+      $('table').margetable({
+      type: 2,
+      colindex: [1, 0, 4, 5, 2, 3, 6, 7]// column 1, 2
+      });
+    });
+
+
+
+
